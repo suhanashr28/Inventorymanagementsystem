@@ -439,25 +439,44 @@ app.get("/api/user/:email", async (req, res, next) => {
 
 // CHANGE PASSWORD
 app.put("/api/change-password/:email", async (req, res, next) => {
-  try {
-    const { newPassword } = req.body;
+    try {
 
-    const hash = bcrypt.hashSync(newPassword, 10);
+        const { newPassword } = req.body;
 
-    await run(
-      `UPDATE users
-       SET password=?
-       WHERE email=?`,
-      [hash, req.params.email]
-    );
+        if (!newPassword) {
+            return res.status(400).json({
+                success: false,
+                message: "Password is required"
+            });
+        }
 
-    res.json({
-      success: true,
-      message: "Password changed successfully"
-    });
-  } catch (err) {
-    next(err);
-  }
+        const user = await get(
+            "SELECT * FROM users WHERE email=?",
+            [req.params.email]
+        );
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+
+        const hash = bcrypt.hashSync(newPassword, 10);
+
+        await run(
+            "UPDATE users SET password=? WHERE email=?",
+            [hash, req.params.email]
+        );
+
+        res.json({
+            success: true,
+            message: "Password changed successfully"
+        });
+
+    } catch (err) {
+        next(err);
+    }
 });
 
 // ======================
