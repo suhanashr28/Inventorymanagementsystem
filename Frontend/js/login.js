@@ -35,12 +35,17 @@ document
 
       if (data.success) {
 
-        message.style.color = "green";
+    message.style.color = "green";
 
-        setTimeout(() => {
-          window.location.href =
-            "dashboard.html";
-        }, 1000);
+    // Save user information
+    localStorage.setItem("userEmail", data.email);
+    localStorage.setItem("userName", data.name);
+
+    setTimeout(() => {
+        window.location.href = "dashboard.html";
+    }, 1000);
+
+
 
       } else {
 

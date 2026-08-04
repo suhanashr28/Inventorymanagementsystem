@@ -62,11 +62,10 @@ async function loadSettings() {
 
     const email = localStorage.getItem("userEmail");
 
-    if (!email) {
-        alert("Please login again.");
-        window.location.href = "login.html";
-        return;
-    }
+if (!email) {
+    window.location.href = "login.html";
+    return;
+}
 
     try {
 
