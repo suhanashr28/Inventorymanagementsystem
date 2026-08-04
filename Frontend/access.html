@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Access Denied</title>
+
+    <link rel="stylesheet" href="css/access.css">
+
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="access-box">
+
+    <i class="fa-solid fa-shield-halved shield"></i>
+
+    <h1>Access Denied</h1>
+
+    <p>
+        You must login to access<br>
+        inventory data.
+    </p>
+
+    <button onclick="loginPage()">
+        Go To Login
+    </button>
+
+    <span>
+        Redirecting in 5 seconds...
+    </span>
+
+</div>
+
+
+<script src="js/script.js"></script>
+
+<script>
+    setTimeout(function(){
+        loginPage();
+    },5000);
+</script>
+
+</body>
+</html>

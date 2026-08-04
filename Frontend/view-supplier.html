@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Supplier</title>
+
+    <link rel="stylesheet" href="css/view-supplier.css">
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>🛒 Grocery IMS</h2>
+
+        <a href="dashboard.html">Dashboard</a>
+        <a href="product.html">Products</a>
+        <a href="supplier-list.html">Suppliers</a>
+        <a href="#" onclick="reportsPage()">Reports</a>
+        <a href="#" onclick="settingsPage()">Settings</a>
+        <a href="#" onclick="logoutPage()">Logout</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+
+        <a href="supplier-list.html" class="back">
+            ← Back to Suppliers
+        </a>
+
+        <h1>Supplier Details</h1>
+
+        <!-- Supplier Card -->
+        <div class="supplier-card">
+
+            <!-- Image Section -->
+            <div class="image-section">
+                <img id="supplierImage"
+                     class="supplier-image"
+                     src=""
+                     alt="Supplier">
+            </div>
+
+            <!-- Details Section -->
+            <div class="details">
+                <h2 id="supplierName"></h2>
+
+                <div class="detail-box">
+                    <strong>Email</strong>
+                    <span id="supplierEmail"></span>
+                </div>
+
+                <div class="detail-box">
+                    <strong>Phone Number</strong>
+                    <span id="supplierPhone"></span>
+                </div>
+
+                <div class="detail-box">
+                    <strong>Address</strong>
+                    <span id="supplierAddress"></span>
+                </div>
+
+                <div class="detail-box">
+                    <strong>Total Products</strong>
+                    <span id="supplierProducts"></span>
+                </div>
+
+                <!-- Buttons -->
+                <div class="buttons">
+                    <button class="edit"
+                        onclick="window.location.href='edit-supplier.html'">
+                        Edit Supplier
+                    </button>
+
+                    <button class="delete"
+                        onclick="deleteSupplierPage()">
+                        Delete Supplier
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+const supplierId = localStorage.getItem("supplierId");
+
+fetch(`http://localhost:3000/api/suppliers/${supplierId}`, { cache: "no-store" })
+.then(response => {
+
+if(!response.ok){
+
+throw new Error("Supplier not found");
+
+}
+
+return response.json();
+
+})
+.then(supplier => {
+
+document.getElementById("supplierName").innerText =
+supplier.name;
+
+document.getElementById("supplierEmail").innerText =
+supplier.email;
+
+document.getElementById("supplierPhone").innerText =
+supplier.phone;
+
+document.getElementById("supplierAddress").innerText =
+supplier.address;
+
+document.getElementById("supplierProducts").innerText =
+supplier.products || "0";
+
+document.getElementById("supplierImage").src =
+"http://localhost:3000/uploads/" + supplier.image;
+
+})
+.catch(error => {
+
+console.log(error);
+
+document.getElementById("supplierName").innerText =
+"Supplier Not Found";
+
+});
+
+</script>
+
+
+<script src="js/script.js"></script>
+
+</body>
+</html>

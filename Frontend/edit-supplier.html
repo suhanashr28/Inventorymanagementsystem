@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Supplier</title>
+    <link rel="stylesheet" href="css/edit-supplier.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <h2>🛒 Grocery IMS</h2>
+
+        <a href="dashboard.html">Dashboard</a>
+        <a href="#" onclick="productsPage()">Products</a>
+        <a href="#" onclick="suppliersPage()">Suppliers</a>
+        <a href="#" onclick="reportsPage()">Reports</a>
+        <a href="#" onclick="settingsPage()">Settings</a>
+        <a href="#" onclick="logoutPage()">Logout</a>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main">
+        <a href="supplier-list.html" class="back">← Back to Suppliers</a>
+
+        <div class="form-box">
+          <h1>Edit Supplier</h1>
+
+          <form>
+            <label>Supplier Name</label>
+            <input type="text" id="supplierNameInput" />
+
+            <label>Contact Email</label>
+            <input type="email" id="supplierEmailInput" />
+
+            <label>Phone Number</label>
+            <input type="text" id="supplierPhoneInput" />
+
+            <label>Address</label>
+            <textarea id="supplierAddressInput"></textarea>
+
+            <label>Current Photo</label>
+            <img
+              id="supplierImagePreview"
+              src=""
+              style="
+                width: 100px;
+                height: 100px;
+                object-fit: cover;
+                display: block;
+                margin-bottom: 10px;
+              "
+            />
+            <input type="file" id="image" accept="image/*" />
+
+            <div class="buttons">
+              <button type="button" class="cancel" onclick="suppliersPage()">
+                Cancel
+              </button>
+              <button type="button" class="update" onclick="updateSupplier()">
+                Update Supplier
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script>
+      const supplierId = localStorage.getItem("supplierId");
+      
+      // LOAD SUPPLIER
+      async function loadSupplier() {
+        if (!supplierId) {
+          alert("No supplier selected");
+          window.location.href = "supplier-list.html";
+          return;
+        }
+
+        try {
+          const response = await fetch(
+            `http://localhost:3000/api/suppliers/${supplierId}`,
+            { cache: "no-store" },
+          );
+
+          if (!response.ok) {
+            throw new Error("Supplier not found");
+          }
+
+          const supplier = await response.json();
+
+          document.getElementById("supplierNameInput").value = supplier.name;
+
+          document.getElementById("supplierEmailInput").value = supplier.email;
+
+          document.getElementById("supplierPhoneInput").value = supplier.phone;
+
+          document.getElementById("supplierAddressInput").value =
+            supplier.address;
+
+         document.getElementById("supplierImagePreview").src =
+    supplier.image
+        ? `http://localhost:3000/uploads/${supplier.image}`
+        : "http://localhost:3000/uploads/default.jpg";
+        } catch (error) {
+          console.log(error);
+          alert("Cannot load supplier");
+        }
+      }
+
+      // UPDATE SUPPLIER
+      async function updateSupplier() {
+
+    const formData = new FormData();
+
+    formData.append(
+        "name",
+        document.getElementById("supplierNameInput").value.trim()
+    );
+
+    formData.append(
+        "email",
+        document.getElementById("supplierEmailInput").value.trim()
+    );
+
+    formData.append(
+        "phone",
+        document.getElementById("supplierPhoneInput").value.trim()
+    );
+
+    formData.append(
+        "address",
+        document.getElementById("supplierAddressInput").value.trim()
+    );
+
+    const image = document.getElementById("image").files[0];
+
+    if (image) {
+        formData.append("image", image);
+    }
+
+    try {
+
+        const response = await fetch(
+            `http://localhost:3000/api/suppliers/${supplierId}`,
+            {
+                method: "PUT",
+                body: formData
+            }
+        );
+
+        const data = await response.json();
+
+        if (data.success) {
+            alert("Supplier Updated Successfully");
+            window.location.href = "supplier-list.html";
+        } else {
+            alert(data.message);
+        }
+
+    } catch (error) {
+        console.error(error);
+        alert("Update Failed");
+    }
+}
+      loadSupplier();
+    </script>
+
+    <script src="js/script.js"></script>
+  </body>
+</html>

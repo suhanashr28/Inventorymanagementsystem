@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <link rel="stylesheet" href="css/setting.css">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="sidebar">
+    <h2>🛒 Grocery IMS</h2>
+
+    <a href="dashboard.html">Dashboard</a>
+
+    <a href="#" onclick="productsPage()">Products</a>
+
+    <a href="supplier-list.html">Suppliers</a>
+
+    <a href="#" onclick="reportsPage()">Reports</a>
+
+    <a href="#" onclick="settingsPage()">Settings</a>
+
+    <a href="#" onclick="logoutPage()">Logout</a>
+</div>
+
+    <div class="main">
+
+        <h1>Settings</h1>
+
+        <div class="card">
+            <h2>Store Information</h2>
+            <label>User Name</label>
+<input type="text" id="userName">
+<label>Email</label>
+<input type="email" id="userEmail">
+<label>Phone</label>
+<input type="text" id="phone" placeholder="9812345678">
+        </div>
+
+        <div class="card">
+            <h2>Change Password</h2>
+
+            <label>New Password</label>
+<input type="password" id="newPassword">
+
+<label>Confirm Password</label>
+<input type="password" id="confirmPassword">
+        </div>
+
+
+        <button onclick="saveChanges()">Save Changes</button>
+
+    </div>
+
+</div>
+<script>
+
+async function loadSettings() {
+
+    const email = localStorage.getItem("userEmail");
+
+    if (!email) {
+        alert("Please login again.");
+        window.location.href = "login.html";
+        return;
+    }
+
+    try {
+
+        const response = await fetch(
+            `http://localhost:3000/api/user/${email}`
+        );
+
+        const user = await response.json();
+
+        document.getElementById("userName").value = user.name;
+        document.getElementById("userEmail").value = user.email;
+
+    } catch (error) {
+
+        console.log(error);
+        alert("Cannot load user details");
+
+    }
+
+}
+
+async function saveSettings() {
+
+    const user = {
+
+        name: document.getElementById("userName").value,
+        email: document.getElementById("userEmail").value
+
+    };
+
+    try {
+
+        const response = await fetch(
+            `http://localhost:3000/api/user/${localStorage.getItem("userEmail")}`,
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(user)
+            }
+        );
+
+        const data = await response.json();
+
+        alert(data.message);
+
+        if (data.success) {
+            localStorage.setItem("userEmail", user.email);
+            localStorage.setItem("userName", user.name);
+        }
+
+    } catch (error) {
+
+        console.log(error);
+        alert("Profile update failed");
+
+    }
+
+}
+
+async function changePassword() {
+
+    const newPassword =
+        document.getElementById("newPassword").value;
+
+    const confirmPassword =
+        document.getElementById("confirmPassword").value;
+
+    if (newPassword !== confirmPassword) {
+        alert("Passwords do not match");
+        return;
+    }
+
+    if (newPassword === "") {
+        return;
+    }
+
+    try {
+
+        const response = await fetch(
+            `http://localhost:3000/api/change-password/${localStorage.getItem("userEmail")}`,
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    newPassword
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        alert(data.message);
+
+        document.getElementById("newPassword").value = "";
+        document.getElementById("confirmPassword").value = "";
+
+    } catch (error) {
+
+        console.log(error);
+        alert("Password update failed");
+
+    }
+
+}
+
+async function saveChanges() {
+
+    await saveSettings();
+    await changePassword();
+
+}
+
+loadSettings();
+
+</script>
+<script src="js/script.js"></script>
+
+</body>
+</html>

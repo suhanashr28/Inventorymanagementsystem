@@ -1,0 +1,144 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#f8fafc;
+}
+
+
+nav{
+    background:white;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 80px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.05);
+}
+
+.logo{
+    font-size:22px;
+    font-weight:bold;
+    color:#0f172a;
+}
+
+nav ul{
+    display:flex;
+    list-style:none;
+}
+
+nav ul li{
+    margin:0 15px;
+}
+
+nav ul li a{
+    text-decoration:none;
+    color:#334155;
+}
+
+.login{
+    padding:10px 20px;
+    border:1px solid #1e3a8a;
+    background:white;
+    color:#1e3a8a;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.signup{
+    padding:10px 20px;
+    border:none;
+    background:#1e3a8a;
+    color:white;
+    border-radius:6px;
+    cursor:pointer;
+    margin-left:10px;
+}
+
+
+.hero{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:80px;
+}
+
+.hero-text{
+    width:50%;
+}
+
+.hero-text h1{
+    font-size:50px;
+    color:#0f172a;
+    margin-bottom:20px;
+}
+
+.hero-text p{
+    color:#64748b;
+    margin-bottom:25px;
+    line-height:1.6;
+}
+
+.start{
+    background:#1e3a8a;
+    color:white;
+    border:none;
+    padding:12px 25px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.learn{
+    background:white;
+    border:1px solid #cbd5e1;
+    padding:12px 25px;
+    border-radius:6px;
+    margin-left:10px;
+    cursor:pointer;
+}
+
+.hero-image img{
+    width:500px;
+}
+
+
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    padding: 50px;
+}
+
+.card {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+.card h3{
+    color:#0f172a;
+    margin-bottom:10px;
+}
+
+.card p{
+    color:#64748b;
+}
+
+
+footer{
+    margin-top:40px;
+    background:#0f172a;
+    color:white;
+    text-align:center;
+    padding:20px;
+}

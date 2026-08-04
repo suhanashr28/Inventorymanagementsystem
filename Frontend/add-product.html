@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Add Product</title>
+
+<link rel="stylesheet" href="css/add-product.css">
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<!-- Sidebar -->
+
+<div class="sidebar">
+
+<h2>🛒 Grocery IMS</h2>
+
+<a href="dashboard.html">Dashboard</a>
+
+<a href="product.html">Products</a>
+
+<a href="supplier-list.html">Suppliers</a>
+
+<a href="#">Reports</a>
+
+<a href="#">Settings</a>
+
+<a href="#">Logout</a>
+
+
+</div>
+
+
+
+
+<!-- Main Content -->
+
+<div class="main">
+
+
+<a href="product.html" class="back">
+← Back to Products
+</a>
+
+
+
+<h1>Add New Product</h1>
+
+
+
+<form id="productForm">
+
+
+<div class="left">
+
+
+
+<label>Product Name</label>
+
+<input 
+type="text"
+id="name"
+placeholder="Enter product name"
+required>
+
+
+
+
+<label>Description</label>
+
+<textarea
+id="description"
+placeholder="Enter product description"
+required></textarea>
+
+
+
+
+
+<div class="row">
+
+
+<div>
+
+<label>Price</label>
+
+<input
+type="number"
+id="price"
+placeholder="Enter price"
+required>
+
+
+</div>
+
+
+
+<div>
+
+<label>Quantity</label>
+
+<input
+type="number"
+id="quantity"
+placeholder="Enter quantity"
+required>
+
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+<div class="right">
+
+<label>Category</label>
+
+<select id="category" required>
+
+<option value="">Select Category</option>
+
+<option value="Dairy">Dairy</option>
+
+<option value="Fruits">Fruits</option>
+
+<option value="Vegetables">Vegetables</option>
+
+<option value="Bakery">Bakery</option>
+
+<option value="Beverages">Beverages</option>
+
+<option value="Snacks">Snacks</option>
+
+<option value="Frozen Food">Frozen Food</option>
+
+<option value="Meat">Meat</option>
+
+<option value="Fish">Fish</option>
+
+<option value="Rice & Grains">Rice & Grains</option>
+
+<option value="Spices">Spices</option>
+
+<option value="Canned Food">Canned Food</option>
+
+<option value="Personal Care">Personal Care</option>
+
+<option value="Cleaning Supplies">Cleaning Supplies</option>
+
+<option value="Others">Others</option>
+
+
+</select>
+
+
+
+
+
+<label>Supplier</label>
+
+
+<input
+type="text"
+id="supplier"
+placeholder="Enter supplier"
+required>
+
+
+
+
+
+<label>Product Image</label>
+
+
+<input
+type="file"
+id="image"
+accept="image/*">
+
+
+
+</div>
+
+
+
+
+</form>
+
+
+
+
+
+<div class="buttons">
+
+
+<button 
+class="cancel"
+type="button"
+onclick="goBack()">
+
+Cancel
+
+</button>
+
+
+
+
+<button 
+type="button"
+class="save"
+onclick="addProduct()">
+
+Save Product
+
+</button>
+
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+<script>
+
+
+async function addProduct(){
+
+
+const formData = new FormData();
+
+
+
+formData.append(
+"name",
+document.getElementById("name").value
+);
+
+
+
+formData.append(
+"description",
+document.getElementById("description").value
+);
+
+
+
+formData.append(
+"price",
+document.getElementById("price").value
+);
+
+
+
+formData.append(
+"quantity",
+document.getElementById("quantity").value
+);
+
+
+
+formData.append(
+"category",
+document.getElementById("category").value
+);
+
+
+
+formData.append(
+"supplier",
+document.getElementById("supplier").value
+);
+
+
+
+formData.append(
+"image",
+document.getElementById("image").files[0]
+);
+
+
+
+
+try{
+
+
+const response = await fetch(
+
+"http://localhost:3000/api/products",
+
+{
+
+method:"POST",
+
+body:formData
+
+}
+
+);
+
+
+
+const data = await response.json();
+
+
+
+console.log(data);
+
+
+
+if(data.success){
+
+
+alert("Product Added Successfully!");
+
+window.location.href="product.html";
+
+
+}
+
+else{
+
+
+alert("Product Not Added");
+
+}
+
+
+}
+
+
+catch(error){
+
+
+console.log(error);
+
+alert("Server Error");
+
+
+}
+
+
+
+}
+
+
+
+</script>
+
+</body>
+
+</html>

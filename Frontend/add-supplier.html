@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Supplier</title>
+    <link rel="stylesheet" href="css/add-supplier.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <h2>🛒 Grocery IMS</h2>
+
+        <a href="dashboard.html">Dashboard</a>
+        <a href="#" onclick="productsPage()">Products</a>
+        <a href="#" onclick="suppliersPage()">Suppliers</a>
+        <a href="#" onclick="reportsPage()">Reports</a>
+        <a href="#" onclick="settingsPage()">Settings</a>
+        <a href="#" onclick="logoutPage()">Logout</a>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main">
+        <a href="supplier-list.html" class="back">← Back to Suppliers</a>
+
+        <div class="form-box">
+          <h1>Add New Supplier</h1>
+
+          <form id="supplierForm">
+
+<label>Supplier Name</label>
+<input type="text" id="name" placeholder="Enter supplier name" />
+
+<label>Contact Email</label>
+<input type="email" id="email" placeholder="Enter email" />
+
+<label>Phone Number</label>
+<input type="tel" id="phone" placeholder="Enter phone number" />
+
+<label>Address</label>
+<textarea id="address" placeholder="Enter address"></textarea>
+
+<label>Supplier Photo</label>
+<input type="file" id="image" accept="image/*">
+
+<div class="buttons">
+<button type="reset" class="cancel">Cancel</button>
+
+<button
+type="button"
+class="save"
+onclick="addSupplier()">
+Save Supplier
+</button>
+
+</div>
+
+</form>
+        </div>
+      </div>
+    </div>
+    <script>
+
+async function addSupplier(){
+
+    const formData = new FormData();
+
+    formData.append("name", document.getElementById("name").value);
+    formData.append("email", document.getElementById("email").value);
+    formData.append("phone", document.getElementById("phone").value);
+    formData.append("address", document.getElementById("address").value);
+
+    const imageFile = document.getElementById("image").files[0];
+
+    if(imageFile){
+        formData.append("image", imageFile);
+    }
+
+    try{
+
+        const response = await fetch(
+            "http://localhost:3000/api/suppliers",
+            {
+                method:"POST",
+                body:formData
+            }
+        );
+
+        const data = await response.json();
+
+        if(data.success){
+
+            alert("Supplier Added Successfully");
+
+            window.location.href =
+            "supplier-list.html";
+
+        }else{
+
+            alert("Supplier Not Added");
+
+        }
+
+    }
+
+    catch(error){
+
+        console.log(error);
+
+        alert("Server Error");
+
+    }
+
+}
+
+</script>
+    <script src="js/script.js"></script>
+  </body>
+</html>

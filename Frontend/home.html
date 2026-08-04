@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InventoryPro</title>
+    <link rel="stylesheet" href="css/home.css">
+</head>
+<body>
+
+   
+    <nav>
+        <div class="logo">📦 InventoryPro</div>
+
+        <ul>
+    <li><a href="home.html">Home</a></li>
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li><a href="product.html">Product</a></li>
+    <li><a href="supplier-list.html">Suppliers</a></li>
+    <li><a href="reports.html">Reports</a></li>
+    <li><a href="setting.html">Settings</a></li>
+</ul>
+        <div class="buttons">
+            <button class="login" onclick="loginPage()">Login</button>
+            <button class="signup" onclick="signupPage()">Sign Up</button>
+        </div>
+    </nav>
+
+   
+    <section class="hero">
+
+        <div class="hero-text">
+            <h1>Smart Inventory<br>Management System</h1>
+
+            <p>
+                Manage your products, suppliers,
+                stock and reports efficiently in one place.
+            </p>
+
+            <div class="hero-btn">
+                <button class="start" onclick="signupPage()">Get Started</button>
+                <button class="learn" onclick="scrollToFeatures()">Learn More</button>
+            </div>
+        </div>
+
+        <div class="hero-image">
+            <img src="image/stock.jpg" alt="Inventory Dashboard">
+        </div>
+
+    </section>
+
+   
+    <section class="features">
+
+    <div class="card" onclick="productsPage()">
+        <h3>📦 Product Management</h3>
+        <p>Add, edit and manage products.</p>
+    </div>
+
+    <div class="card" onclick="suppliersPage()">
+        <h3>🚚 Supplier Management</h3>
+        <p>Manage supplier details easily.</p>
+    </div>
+
+    <div class="card" onclick="productsPage()">
+        <h3>⚠️ Low Stock Alerts</h3>
+        <p>Get notified when stock is low.</p>
+    </div>
+
+    <div class="card" onclick="productsPage()">
+        <h3>🔍 Search & Filter</h3>
+        <p>Find products quickly.</p>
+    </div>
+
+    <div class="card" onclick="settingsPage()">
+        <h3>🔒 Secure Authentication</h3>
+        <p>Protected user access.</p>
+    </div>
+
+    <div class="card" onclick="reportsPage()">
+        <h3>📊 Reports & Analytics</h3>
+        <p>Track inventory performance.</p>
+    </div>
+
+</section>
+    <footer id="footer">
+        <p>© 2026 InventoryPro. All Rights Reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+
+</body>
+</html>

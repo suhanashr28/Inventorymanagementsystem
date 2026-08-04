@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Grocery Inventory System</title>
+
+<link rel="stylesheet" href="css/product.css" />
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+/>
+
+</head>
+
+<body>
+
+<div class="container">
+
+
+<!-- Sidebar -->
+<div class="sidebar">
+
+<h2>🛒 Grocery IMS</h2>
+
+<a href="dashboard.html">Dashboard</a>
+
+<a href="#" onclick="productsPage()">Products</a>
+
+<a href="supplier-list.html">Suppliers</a>
+
+<a href="#" onclick="reportsPage()">Reports</a>
+
+<a href="#" onclick="settingsPage()">Settings</a>
+
+<a href="#" onclick="logoutPage()">Logout</a>
+
+</div>
+
+
+
+<!-- Main -->
+
+<div class="main">
+
+
+<h1>Products</h1>
+
+
+<div class="top-bar">
+
+<input 
+type="text" 
+id="search"
+placeholder="Search Product"
+/>
+
+
+<select id="categoryFilter">
+
+<option value="">All Categories</option>
+
+<option>Dairy</option>
+
+<option>Fruits</option>
+
+<option>Vegetables</option>
+
+<option>Bakery</option>
+
+</select>
+
+
+
+<button onclick="addProductPage()">
+Add Product
+</button>
+
+
+</div>
+
+
+
+
+<div class="table-container">
+
+
+<table>
+
+
+<thead>
+
+<tr>
+
+<th>Image</th>
+
+<th>Product Name</th>
+
+<th>Category</th>
+
+<th>Price</th>
+
+<th>Quantity</th>
+
+<th>Status</th>
+
+<th>Action</th>
+
+</tr>
+
+
+</thead>
+
+
+
+<tbody id="productTable">
+
+
+</tbody>
+
+
+
+</table>
+
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<script>
+
+
+let allProducts = [];
+
+
+// Load products from database
+
+async function loadProducts(){
+
+
+try{
+
+
+const response = await fetch(
+"http://localhost:3000/api/products"
+);
+
+
+
+allProducts = await response.json();
+
+
+displayProducts(allProducts);
+
+
+
+}
+
+catch(error){
+
+console.log(error);
+
+alert("Cannot connect with server");
+
+}
+
+
+
+}
+
+
+
+
+// Display products
+
+
+function displayProducts(products){
+
+
+let table = document.getElementById("productTable");
+
+
+table.innerHTML="";
+
+
+
+products.forEach(product=>{
+
+
+let status = product.quantity < 5 
+? "Low Stock"
+: "In Stock";
+
+
+
+let row = `
+
+
+<tr class="${product.quantity < 5 ? 'low-stock':''}">
+
+
+<td>
+
+<img 
+src="http://localhost:3000/uploads/${product.image}" 
+width="40"
+height="40"
+alt="Product Image">
+
+</td>
+
+
+<td>${product.name}</td>
+
+
+<td>${product.category}</td>
+
+
+<td>Rs.${product.price}</td>
+
+
+<td>${product.quantity}</td>
+
+
+<td class="${product.quantity < 5 ? 'low':'stock'}">
+
+${status}
+
+</td>
+
+
+
+<td class="actions">
+
+
+<i 
+class="fa-solid fa-eye"
+onclick="viewProduct(${product.id})">
+</i>
+
+
+
+<i 
+class="fa-solid fa-pen"
+onclick="editProduct(${product.id})">
+</i>
+
+
+
+<i 
+class="fa-solid fa-trash"
+onclick="deleteProduct(${product.id})">
+</i>
+
+
+
+</td>
+
+
+
+</tr>
+
+
+`;
+
+
+
+table.innerHTML += row;
+
+
+
+});
+
+
+
+}
+
+
+
+
+// View
+
+function viewProduct(id){
+
+
+localStorage.setItem(
+"productId",
+id
+);
+
+
+window.location.href =
+"view-product.html";
+
+
+}
+
+
+
+
+
+// Edit
+
+function editProduct(id){
+
+
+localStorage.setItem(
+"productId",
+id
+);
+
+
+window.location.href =
+"edit-product.html";
+
+
+}
+
+
+
+
+
+
+// Delete
+
+
+async function deleteProduct(id){
+
+
+let confirmDelete =
+confirm("Are you sure you want to delete?");
+
+
+
+if(!confirmDelete)
+return;
+
+
+
+await fetch(
+`http://localhost:3000/api/products/${id}`,
+{
+
+method:"DELETE"
+
+}
+
+);
+
+
+
+alert("Product deleted");
+
+
+loadProducts();
+
+
+}
+
+
+
+
+
+
+// Search
+
+document
+.getElementById("search")
+.addEventListener("input",function(){
+
+
+let value=this.value.toLowerCase();
+
+
+let filtered =
+allProducts.filter(product=>
+
+product.name.toLowerCase()
+.includes(value)
+
+);
+
+
+
+displayProducts(filtered);
+
+
+
+});
+
+
+
+
+
+
+// Category filter
+
+
+document
+.getElementById("categoryFilter")
+.addEventListener("change",function(){
+
+
+let value=this.value;
+
+
+
+if(value=="")
+{
+
+displayProducts(allProducts);
+
+}
+
+else{
+
+
+let filtered =
+allProducts.filter(product=>
+
+product.category==value
+
+);
+
+
+
+displayProducts(filtered);
+
+
+}
+
+
+
+});
+
+
+
+
+
+
+loadProducts();
+
+
+</script>
+
+
+
+<script src="js/script.js"></script>
+
+
+</body>
+</html>

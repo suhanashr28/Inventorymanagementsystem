@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Edit Product</title>
+
+<link rel="stylesheet" href="css/edit-product.css">
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<div class="sidebar">
+
+<h2>🛒 Grocery IMS</h2>
+
+
+<a href="dashboard.html">Dashboard</a>
+
+<a href="#" onclick="productsPage()">Products</a>
+
+<a href="#" onclick="suppliersPage()">Suppliers</a>
+
+<a href="#" onclick="reportsPage()">Reports</a>
+
+<a href="#" onclick="settingsPage()">Settings</a>
+
+<a href="#" onclick="logoutPage()">Logout</a>
+
+
+</div>
+
+
+
+
+
+<div class="main">
+
+
+<a href="product.html" class="back">
+← Back to Products
+</a>
+
+
+<h1>Edit Product</h1>
+
+
+
+
+
+<form class="product-form">
+
+
+
+<div class="left">
+
+
+
+<label>
+Product Name
+</label>
+
+
+<input 
+type="text" 
+id="productName">
+
+
+
+
+
+<label>
+Description
+</label>
+
+
+<textarea id="description"></textarea>
+
+
+
+
+
+<label>
+Price
+</label>
+
+
+<input 
+type="number" 
+id="price">
+
+
+
+
+
+<label>
+Quantity
+</label>
+
+
+<input 
+type="number" 
+id="quantity">
+
+
+
+</div>
+
+
+
+
+
+
+<div class="right">
+
+
+
+
+<label>Category</label>
+
+<select id="category" required>
+
+<option value="">Select Category</option>
+
+<option value="Dairy">Dairy</option>
+
+<option value="Fruits">Fruits</option>
+
+<option value="Vegetables">Vegetables</option>
+
+<option value="Bakery">Bakery</option>
+
+<option value="Beverages">Beverages</option>
+
+<option value="Snacks">Snacks</option>
+
+<option value="Frozen Food">Frozen Food</option>
+
+<option value="Meat">Meat</option>
+
+<option value="Fish">Fish</option>
+
+<option value="Rice & Grains">Rice & Grains</option>
+
+<option value="Spices">Spices</option>
+
+<option value="Canned Food">Canned Food</option>
+
+<option value="Personal Care">Personal Care</option>
+
+<option value="Cleaning Supplies">Cleaning Supplies</option>
+
+<option value="Others">Others</option>
+
+
+</select>
+
+
+
+
+<label>
+Current Image
+</label>
+
+
+
+<img 
+id="productImage"
+src=""
+class="product-image">
+
+
+
+<input 
+type="file"
+id="image"
+accept="image/*">
+
+
+
+
+
+</div>
+
+
+
+</form>
+
+
+
+
+
+
+
+<div class="buttons">
+
+
+<button
+class="cancel"
+onclick="productsPage()">
+
+Cancel
+
+</button>
+
+<button
+type="button"
+class="update"
+onclick="updateProduct()">
+Update Product
+</button>
+
+
+
+
+
+
+</div>
+
+
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+<script>
+
+const productId = localStorage.getItem("productId");
+
+
+// ===============================
+// LOAD PRODUCT
+// ===============================
+
+async function loadProduct(){
+
+
+try{
+
+
+const response = await fetch(
+`http://localhost:3000/api/products/${productId}`
+);
+
+
+const product = await response.json();
+
+
+
+document.getElementById("productName").value =
+product.name;
+
+
+document.getElementById("description").value =
+product.description;
+
+
+document.getElementById("price").value =
+product.price;
+
+
+document.getElementById("quantity").value =
+product.quantity;
+
+
+document.getElementById("category").value =
+product.category;
+
+
+
+// show old image
+
+document.getElementById("productImage").src =
+"http://localhost:3000/uploads/" + product.image;
+
+
+
+}
+
+catch(error){
+
+console.log(error);
+
+alert("Cannot load product");
+
+}
+
+
+}
+
+
+
+
+// ===============================
+// IMAGE PREVIEW WHEN SELECTING NEW IMAGE
+// ===============================
+
+
+document.getElementById("image").addEventListener(
+"change",
+function(){
+
+
+const file = this.files[0];
+
+
+if(file){
+
+
+document.getElementById("productImage").src =
+URL.createObjectURL(file);
+
+
+}
+
+
+});
+
+
+
+
+// ===============================
+// UPDATE PRODUCT
+// ===============================
+
+
+async function updateProduct(){
+
+const formData = new FormData();
+
+formData.append("name", document.getElementById("productName").value);
+formData.append("supplier", "");
+formData.append("price", document.getElementById("price").value);
+formData.append("quantity", document.getElementById("quantity").value);
+formData.append("category", document.getElementById("category").value);
+formData.append("description", document.getElementById("description").value);
+
+const imageFile = document.getElementById("image").files[0];
+
+if(imageFile){
+formData.append("image", imageFile);
+}
+
+try{
+
+const response = await fetch(
+`http://localhost:3000/api/products/${productId}`,
+{
+method:"PUT",
+body: formData
+}
+);
+
+const data = await response.json();
+
+if(data.success){
+
+alert("Product Updated Successfully!");
+
+window.location.href = "product.html";
+
+}else{
+
+alert(data.message || "Update failed");
+
+}
+
+}catch(error){
+
+console.log(error);
+
+alert("Update failed");
+
+}
+
+}
+loadProduct();
+
+
+</script>
+
+
+
+<script src="js/script.js"></script>
+
+
+</body>
+</html>
