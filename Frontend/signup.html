@@ -43,25 +43,31 @@
         >
 
         <label>Password</label>
-        <input
-          type="password"
-          id="password"
-          placeholder="Create password"
-          minlength="8"
-          autocomplete="new-password"
-          required
-        >
+        <div class="password-field">
+          <input
+            type="password"
+            id="password"
+            placeholder="Create password"
+            minlength="8"
+            autocomplete="new-password"
+            required
+          >
+          <button class="password-toggle" type="button" aria-label="Show password" aria-pressed="false">👁</button>
+        </div>
         <p class="password-help">At least 8 characters, with uppercase, lowercase, a number, and a special character (for example, #).</p>
 
         <label>Confirm Password</label>
-        <input
-          type="password"
-          id="confirmPassword"
-          placeholder="Confirm password"
-          minlength="8"
-          autocomplete="new-password"
-          required
-        >
+        <div class="password-field">
+          <input
+            type="password"
+            id="confirmPassword"
+            placeholder="Confirm password"
+            minlength="8"
+            autocomplete="new-password"
+            required
+          >
+          <button class="password-toggle" type="button" aria-label="Show password" aria-pressed="false">👁</button>
+        </div>
 
         <label class="agreement">
           <input type="checkbox" id="agreeTerms" required>

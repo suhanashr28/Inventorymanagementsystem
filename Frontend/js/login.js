@@ -80,6 +80,17 @@ document
     }
   });
 
+document.querySelectorAll(".password-toggle").forEach((button) => {
+  button.addEventListener("click", () => {
+    const input = button.parentElement.querySelector("input");
+    const isHidden = input.type === "password";
+    input.type = isHidden ? "text" : "password";
+    button.textContent = isHidden ? "🙈" : "👁";
+    button.setAttribute("aria-label", isHidden ? "Hide password" : "Show password");
+    button.setAttribute("aria-pressed", String(isHidden));
+  });
+});
+
 function getPasswordError(password) {
   if (password.length < 8) return "Password must be at least 8 characters long.";
   if (!/[a-z]/.test(password)) return "Password must include a lowercase letter.";
