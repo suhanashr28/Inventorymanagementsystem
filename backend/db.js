@@ -2,23 +2,38 @@ const path = require("path");
 require("dotenv").config({ path: path.join(__dirname, ".env") });
 const { createClient } = require("@libsql/client");
 
-const db = createClient({
-  url: process.env.TURSO_DATABASE_URL,
-  authToken: process.env.TURSO_AUTH_TOKEN,
-});
+let db;
+
+function getDb() {
+  if (db) return db;
+
+  const url = process.env.TURSO_DATABASE_URL;
+  const authToken = process.env.TURSO_AUTH_TOKEN;
+
+  if (!url) {
+    throw new Error("Missing TURSO_DATABASE_URL environment variable");
+  }
+
+  if (!authToken) {
+    throw new Error("Missing TURSO_AUTH_TOKEN environment variable");
+  }
+
+  db = createClient({ url, authToken });
+  return db;
+}
 
 async function get(sql, args = []) {
-  const result = await db.execute({ sql, args });
+  const result = await getDb().execute({ sql, args });
   return result.rows[0];
 }
 
 async function all(sql, args = []) {
-  const result = await db.execute({ sql, args });
+  const result = await getDb().execute({ sql, args });
   return result.rows;
 }
 
 async function run(sql, args = []) {
-  const result = await db.execute({ sql, args });
+  const result = await getDb().execute({ sql, args });
   return {
     // Turso returns this as a BigInt — JSON.stringify cannot
     // serialize BigInt, so convert it to a plain Number here.
@@ -29,7 +44,7 @@ async function run(sql, args = []) {
 }
 
 async function init() {
-  await db.execute(`
+  await getDb().execute(`
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
@@ -39,7 +54,7 @@ async function init() {
     );
   `);
 
-  await db.execute(`
+  await getDb().execute(`
     CREATE TABLE IF NOT EXISTS products (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
@@ -53,7 +68,7 @@ async function init() {
     );
   `);
 
-  await db.execute(`
+  await getDb().execute(`
     CREATE TABLE IF NOT EXISTS suppliers (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
@@ -65,7 +80,7 @@ async function init() {
     );
   `);
 
-  await db.execute(`
+  await getDb().execute(`
     CREATE TABLE IF NOT EXISTS settings (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         store_name TEXT,
@@ -87,4 +102,4 @@ async function init() {
   console.log("✅ Database connected successfully (Turso)");
 }
 
-module.exports = { db, get, all, run, init };
+module.exports = { getDb, get, all, run, init };
