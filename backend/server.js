@@ -13,9 +13,10 @@ const databaseReady = init();
 
 // Vercel functions have a read-only deployment directory. `/tmp` is the
 // writable location available during a function instance's lifetime.
+const bundledUploadsDir = path.join(__dirname, "uploads");
 const uploadsDir = process.env.VERCEL
   ? path.join("/tmp", "inventory-uploads")
-  : path.join(__dirname, "uploads");
+  : bundledUploadsDir;
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
@@ -55,6 +56,9 @@ app.use(express.static(path.join(__dirname, "../frontend")));
 
 // image folder access
 app.use("/uploads", express.static(uploadsDir));
+if (uploadsDir !== bundledUploadsDir) {
+  app.use("/uploads", express.static(bundledUploadsDir));
+}
 
 app.get("/", (req, res) => {
   res.redirect("/home.html");
