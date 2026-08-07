@@ -90,7 +90,7 @@
 
 const supplierId = localStorage.getItem("supplierId");
 
-fetch(`http://localhost:3000/api/suppliers/${supplierId}`, { cache: "no-store" })
+fetch(`/api/suppliers/${supplierId}`, { cache: "no-store" })
 .then(response => {
 
 if(!response.ok){
@@ -120,7 +120,7 @@ document.getElementById("supplierProducts").innerText =
 supplier.products || "0";
 
 document.getElementById("supplierImage").src =
-"http://localhost:3000/uploads/" + supplier.image;
+"/uploads/" + supplier.image;
 
 })
 .catch(error => {

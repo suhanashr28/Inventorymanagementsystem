@@ -70,7 +70,7 @@ if (!email) {
     try {
 
         const response = await fetch(
-            `http://localhost:3000/api/user/${email}`
+            `/api/user/${email}`
         );
 
         const user = await response.json();
@@ -99,7 +99,7 @@ async function saveSettings() {
     try {
 
         const response = await fetch(
-            `http://localhost:3000/api/user/${localStorage.getItem("userEmail")}`,
+            `/api/user/${localStorage.getItem("userEmail")}`,
             {
                 method: "PUT",
                 headers: {
@@ -147,7 +147,7 @@ async function changePassword() {
     try {
 
         const response = await fetch(
-            `http://localhost:3000/api/change-password/${localStorage.getItem("userEmail")}`,
+            `/api/change-password/${localStorage.getItem("userEmail")}`,
             {
                 method: "PUT",
                 headers: {

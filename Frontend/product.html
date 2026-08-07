@@ -153,7 +153,7 @@ try{
 
 
 const response = await fetch(
-"http://localhost:3000/api/products"
+"/api/products"
 );
 
 
@@ -213,7 +213,7 @@ let row = `
 <td>
 
 <img 
-src="http://localhost:3000/uploads/${product.image}" 
+src="/uploads/${product.image}" 
 width="40"
 height="40"
 alt="Product Image">
@@ -349,7 +349,7 @@ return;
 
 
 await fetch(
-`http://localhost:3000/api/products/${id}`,
+`/api/products/${id}`,
 {
 
 method:"DELETE"

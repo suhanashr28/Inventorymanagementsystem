@@ -227,7 +227,7 @@ try{
 
 const response = await fetch(
 
-`http://localhost:3000/api/products/${productId}`
+`/api/products/${productId}`
 
 );
 
@@ -304,7 +304,7 @@ document.getElementById("stock").innerText =
 
 
 const imagePath = 
-"http://localhost:3000/uploads/" + product.image;
+"/uploads/" + product.image;
 
 
 document.getElementById("mainImage").src = imagePath;
@@ -374,7 +374,7 @@ return;
 
 await fetch(
 
-`http://localhost:3000/api/products/${productId}`,
+`/api/products/${productId}`,
 
 {
 

@@ -100,13 +100,13 @@ async function loadReport(){
     try{
 
         const productsResponse = await fetch(
-            "http://localhost:3000/api/products"
+            "/api/products"
         );
 
         const products = await productsResponse.json();
 
         const suppliersResponse = await fetch(
-            "http://localhost:3000/api/suppliers"
+            "/api/suppliers"
         );
 
         const suppliers = await suppliersResponse.json();

@@ -7,6 +7,10 @@ const bcrypt = require("bcryptjs");
 const multer = require("multer");
 const { get, all, run, init } = require("./db");
 
+// A serverless function may receive a request while the database setup is
+// still running. Keep one shared promise and wait for it on every request.
+const databaseReady = init();
+
 // make sure the uploads folder exists before multer tries to write to it
 const uploadsDir = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadsDir)) {
@@ -22,6 +26,15 @@ const PORT = process.env.PORT || 3000;
 // ======================
 
 app.use(express.json());
+
+app.use(async (req, res, next) => {
+  try {
+    await databaseReady;
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
 
 // allow requests from any origin (fixes silent failures if frontend
 // is opened as a file:// page or served from a different port)
@@ -495,12 +508,10 @@ app.use((err, req, res, next) => {
 // START SERVER
 // ======================
 
-init()
-  .then(() => {
-    console.log("✅ Database initialized");
-  })
-  .catch((err) => {
-    console.error("❌ Database init failed:", err);
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`);
   });
+}
 
 module.exports = app;

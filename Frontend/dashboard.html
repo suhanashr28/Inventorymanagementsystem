@@ -83,13 +83,13 @@ async function loadDashboard(){
   try{
 
     const productsResponse =
-    await fetch("http://localhost:3000/api/products");
+    await fetch("/api/products");
 
     const products =
     await productsResponse.json();
 
     const suppliersResponse =
-    await fetch("http://localhost:3000/api/suppliers");
+    await fetch("/api/suppliers");
 
     const suppliers =
     await suppliersResponse.json();

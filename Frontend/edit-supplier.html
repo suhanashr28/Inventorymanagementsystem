@@ -79,7 +79,7 @@
 
         try {
           const response = await fetch(
-            `http://localhost:3000/api/suppliers/${supplierId}`,
+            `/api/suppliers/${supplierId}`,
             { cache: "no-store" },
           );
 
@@ -100,8 +100,8 @@
 
          document.getElementById("supplierImagePreview").src =
     supplier.image
-        ? `http://localhost:3000/uploads/${supplier.image}`
-        : "http://localhost:3000/uploads/default.jpg";
+        ? `/uploads/${supplier.image}`
+        : "/uploads/default.jpg";
         } catch (error) {
           console.log(error);
           alert("Cannot load supplier");
@@ -142,7 +142,7 @@
     try {
 
         const response = await fetch(
-            `http://localhost:3000/api/suppliers/${supplierId}`,
+            `/api/suppliers/${supplierId}`,
             {
                 method: "PUT",
                 body: formData
