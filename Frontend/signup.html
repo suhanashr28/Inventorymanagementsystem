@@ -46,14 +46,19 @@
           type="password"
           id="password"
           placeholder="Create password"
+          minlength="8"
+          autocomplete="new-password"
           required
         >
+        <p class="password-help">At least 8 characters, with uppercase, lowercase, a number, and a special character (for example, #).</p>
 
         <label>Confirm Password</label>
         <input
           type="password"
           id="confirmPassword"
           placeholder="Confirm password"
+          minlength="8"
+          autocomplete="new-password"
           required
         >
 

@@ -100,3 +100,10 @@ button{
     color:#2563eb;
     font-weight:bold;
 }
+
+.password-help{
+    font-size:12px;
+    line-height:1.4;
+    color:#64748b;
+    margin:6px 0 0;
+}

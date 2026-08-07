@@ -25,6 +25,25 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
+function passwordError(password) {
+  if (typeof password !== "string" || password.length < 8) {
+    return "Password must be at least 8 characters long";
+  }
+  if (!/[a-z]/.test(password)) {
+    return "Password must include a lowercase letter";
+  }
+  if (!/[A-Z]/.test(password)) {
+    return "Password must include an uppercase letter";
+  }
+  if (!/\d/.test(password)) {
+    return "Password must include a number";
+  }
+  if (!/[#?!@$%^&*-]/.test(password)) {
+    return "Password must include a special character, such as #";
+  }
+  return null;
+}
+
 // ======================
 // MIDDLEWARE
 // ======================
@@ -87,6 +106,11 @@ app.post("/api/login", async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
+    const invalidPassword = passwordError(password);
+    if (invalidPassword) {
+      return res.status(400).json({ success: false, message: invalidPassword });
+    }
+
     const user = await get("SELECT * FROM users WHERE email=?", [email]);
 
     if (!user) {
@@ -123,6 +147,11 @@ app.post("/api/login", async (req, res, next) => {
 app.post("/api/signup", async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
+
+    const invalidPassword = passwordError(password);
+    if (invalidPassword) {
+      return res.status(400).json({ success: false, message: invalidPassword });
+    }
 
     const exist = await get("SELECT * FROM users WHERE email=?", [email]);
 
@@ -467,6 +496,14 @@ app.put("/api/change-password/:email", async (req, res, next) => {
             return res.status(400).json({
                 success: false,
                 message: "Password is required"
+            });
+        }
+
+        const invalidPassword = passwordError(newPassword);
+        if (invalidPassword) {
+            return res.status(400).json({
+                success: false,
+                message: invalidPassword
             });
         }
 
