@@ -16,6 +16,9 @@ document
     const confirmPassword =
       document.getElementById("confirmPassword").value;
 
+    const agreeTerms =
+      document.getElementById("agreeTerms").checked;
+
     const message =
       document.getElementById("message");
 
@@ -34,6 +37,12 @@ document
 
       message.style.color = "red";
 
+      return;
+    }
+
+    if (!agreeTerms) {
+      message.textContent = "Please agree to the Terms and Privacy Policy.";
+      message.style.color = "red";
       return;
     }
 

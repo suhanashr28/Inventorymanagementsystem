@@ -10,12 +10,21 @@ document
     const password =
       document.getElementById("password").value;
 
+    const rememberMe =
+      document.getElementById("rememberMe").checked;
+
     const message =
       document.getElementById("message");
 
     const passwordError = getPasswordError(password);
     if (passwordError) {
       message.textContent = passwordError;
+      message.style.color = "red";
+      return;
+    }
+
+    if (!rememberMe) {
+      message.textContent = "Please select Remember Me before logging in.";
       message.style.color = "red";
       return;
     }

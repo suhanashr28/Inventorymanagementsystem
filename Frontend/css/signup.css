@@ -107,3 +107,15 @@ button{
     color:#64748b;
     margin:6px 0 0;
 }
+
+.agreement{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-top:15px;
+    font-weight:normal;
+}
+
+.agreement input[type="checkbox"]{
+    width:auto;
+}

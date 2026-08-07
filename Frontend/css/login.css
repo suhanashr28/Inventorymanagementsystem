@@ -87,6 +87,20 @@ input[type="password"]{
     font-size:14px;
 }
 
+.options label,
+.agreement{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin:0;
+    font-weight:normal;
+}
+
+.options input[type="checkbox"],
+.agreement input[type="checkbox"]{
+    width:auto;
+}
+
 .options a{
     color:#2563eb;
     text-decoration:none;
