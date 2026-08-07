@@ -85,7 +85,7 @@ document.querySelectorAll(".password-toggle").forEach((button) => {
     const input = button.parentElement.querySelector("input");
     const isHidden = input.type === "password";
     input.type = isHidden ? "text" : "password";
-    button.textContent = isHidden ? "🙈" : "👁";
+    button.classList.toggle("is-visible", isHidden);
     button.setAttribute("aria-label", isHidden ? "Hide password" : "Show password");
     button.setAttribute("aria-pressed", String(isHidden));
   });
