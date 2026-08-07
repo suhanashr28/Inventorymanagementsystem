@@ -11,8 +11,11 @@ const { get, all, run, init } = require("./db");
 // still running. Keep one shared promise and wait for it on every request.
 const databaseReady = init();
 
-// make sure the uploads folder exists before multer tries to write to it
-const uploadsDir = path.join(__dirname, "uploads");
+// Vercel functions have a read-only deployment directory. `/tmp` is the
+// writable location available during a function instance's lifetime.
+const uploadsDir = process.env.VERCEL
+  ? path.join("/tmp", "inventory-uploads")
+  : path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
@@ -51,7 +54,7 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname, "../frontend")));
 
 // image folder access
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/uploads", express.static(uploadsDir));
 
 app.get("/", (req, res) => {
   res.redirect("/home.html");
@@ -63,7 +66,7 @@ app.get("/", (req, res) => {
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, "uploads"));
+    cb(null, uploadsDir);
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + "-" + file.originalname);
