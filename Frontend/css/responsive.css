@@ -1,0 +1,212 @@
+/* Shared responsive rules for InventoryPro pages. */
+img {
+  max-width: 100%;
+}
+
+@media (max-width: 900px) {
+  .container {
+    min-height: 100vh;
+  }
+
+  .sidebar {
+    width: 180px;
+    padding: 16px 10px;
+  }
+
+  .main {
+    min-width: 0;
+    padding: 24px;
+  }
+
+  .cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .product-form,
+  .product-card {
+    gap: 24px;
+  }
+
+  nav {
+    padding: 18px 32px;
+  }
+
+  .hero {
+    padding: 56px 32px;
+    gap: 28px;
+  }
+
+  .hero-image img {
+    width: 360px;
+  }
+}
+
+@media (max-width: 680px) {
+  body {
+    min-width: 0;
+  }
+
+  .container {
+    display: block;
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+    border-radius: 0;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    padding: 14px;
+  }
+
+  .sidebar h2 {
+    margin-bottom: 10px;
+  }
+
+  .sidebar a {
+    display: inline-block;
+    padding: 8px 10px;
+    margin: 0 2px 4px 0;
+    font-size: 14px;
+  }
+
+  .main {
+    padding: 18px 14px;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .table-container,
+  .table-section {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  table {
+    min-width: 620px;
+  }
+
+  .product-form,
+  .product-card {
+    display: block;
+    padding: 18px;
+  }
+
+  .product-form .right,
+  .product-card .details {
+    margin-top: 22px;
+  }
+
+  .row,
+  .top,
+  .buttons {
+    flex-wrap: wrap;
+  }
+
+  .row {
+    display: block;
+  }
+
+  .row > div + div {
+    margin-top: 12px;
+  }
+
+  .buttons {
+    display: flex;
+    gap: 10px;
+    text-align: left;
+  }
+
+  .buttons button,
+  .buttons .cancel,
+  .buttons .save,
+  .buttons .update,
+  .buttons .edit,
+  .buttons .delete {
+    margin: 0;
+    flex: 1 1 130px;
+  }
+
+  .main-image {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+  }
+
+  .top {
+    display: block;
+  }
+
+  .stock {
+    display: inline-block;
+    margin-top: 10px;
+  }
+
+  nav {
+    display: block;
+    padding: 18px;
+  }
+
+  nav ul {
+    flex-wrap: wrap;
+    margin: 14px 0;
+  }
+
+  nav ul li {
+    margin: 6px 12px 6px 0;
+  }
+
+  .hero {
+    display: block;
+    padding: 40px 20px;
+  }
+
+  .hero-text {
+    width: 100%;
+  }
+
+  .hero-text h1 {
+    font-size: 36px;
+  }
+
+  .hero-image {
+    margin-top: 28px;
+  }
+
+  .hero-image img {
+    width: 100%;
+  }
+
+  .features {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 24px 16px;
+  }
+
+  .card {
+    padding: 24px;
+  }
+
+  .left,
+  .right {
+    width: 100%;
+  }
+
+  .container > .left {
+    padding: 28px 20px;
+  }
+
+  .container > .right {
+    padding: 28px 20px;
+  }
+
+  .login-box,
+  .signup-box {
+    width: 100%;
+    max-width: 380px;
+  }
+}
