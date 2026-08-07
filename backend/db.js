@@ -44,60 +44,60 @@ async function run(sql, args = []) {
 }
 
 async function init() {
-  // A single Turso batch avoids five separate network round trips whenever a
-  // Vercel function starts. Each statement remains idempotent and therefore
-  // safe for both existing and new databases.
-  await getDb().batch([
-    { sql: `
-      CREATE TABLE IF NOT EXISTS users (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          name TEXT NOT NULL,
-          email TEXT UNIQUE NOT NULL,
-          password TEXT NOT NULL,
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-      )
-    ` },
-    { sql: `
-      CREATE TABLE IF NOT EXISTS products (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          name TEXT NOT NULL,
-          supplier TEXT,
-          price REAL,
-          quantity INTEGER,
-          category TEXT,
-          description TEXT,
-          image TEXT,
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-      )
-    ` },
-    { sql: `
-      CREATE TABLE IF NOT EXISTS suppliers (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          name TEXT NOT NULL,
-          email TEXT,
-          phone TEXT,
-          address TEXT,
-          image TEXT,
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-      )
-    ` },
-    { sql: `
-      CREATE TABLE IF NOT EXISTS settings (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          store_name TEXT,
-          email TEXT,
-          phone TEXT
-      )
-    ` },
-    {
-      sql: `
-        INSERT INTO settings (store_name, email, phone)
-        SELECT ?, ?, ?
-        WHERE NOT EXISTS (SELECT 1 FROM settings)
-      `,
-      args: ["Grocery IMS", "admin@gmail.com", "9812345678"]
-    }
-  ]);
+  await getDb().execute(`
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        email TEXT UNIQUE NOT NULL,
+        password TEXT NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+  `);
+
+  await getDb().execute(`
+    CREATE TABLE IF NOT EXISTS products (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        supplier TEXT,
+        price REAL,
+        quantity INTEGER,
+        category TEXT,
+        description TEXT,
+        image TEXT,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+  `);
+
+  await getDb().execute(`
+    CREATE TABLE IF NOT EXISTS suppliers (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        email TEXT,
+        phone TEXT,
+        address TEXT,
+        image TEXT,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    );
+  `);
+
+  await getDb().execute(`
+    CREATE TABLE IF NOT EXISTS settings (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        store_name TEXT,
+        email TEXT,
+        phone TEXT
+    );
+  `);
+
+  // Seed default settings row if none exists yet
+  const settings = await get("SELECT * FROM settings LIMIT 1");
+
+  if (!settings) {
+    await run(
+      `INSERT INTO settings (store_name, email, phone) VALUES (?, ?, ?)`,
+      ["Grocery IMS", "admin@gmail.com", "9812345678"]
+    );
+  }
 
   console.log("✅ Database connected successfully (Turso)");
 }
