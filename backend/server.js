@@ -497,11 +497,10 @@ app.use((err, req, res, next) => {
 
 init()
   .then(() => {
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running at http://localhost:${PORT}`);
-    });
+    console.log("✅ Database initialized");
   })
   .catch((err) => {
     console.error("❌ Database init failed:", err);
-    process.exit(1);
   });
+
+module.exports = app;
