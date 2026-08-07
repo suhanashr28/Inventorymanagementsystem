@@ -45,7 +45,7 @@ function logoutPage() {
 function addProductPage() {
   window.location.href = "add-product.html";
 }
-
+ 
 function viewProductPage(product) {
   localStorage.setItem("selectedProduct", product);
   window.location.href = "view-product.html";
@@ -128,40 +128,41 @@ function scrollToFeatures() {
 // ==========================
 
 async function signup() {
-  const name = document.getElementById("name").value;
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  const confirmPassword = document.getElementById("confirmPassword").value;
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
 
-  if (password !== confirmPassword) {
-    alert("Passwords do not match.");
-    return;
-  }
-
-  try {
-    const response = await fetch("http://localhost:3000/api/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        password,
-      }),
-    });
-
-    const data = await response.json();
-
-    alert(data.message);
-
-    if (data.success) {
-      window.location.href = "login.html";
+    if (password !== confirmPassword) {
+        alert("Passwords do not match.");
+        return;
     }
-  } catch (error) {
-    console.error(error);
-    alert("Server Error");
-  }
+
+    try {
+        const response = await fetch("/api/signup", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                name,
+                email,
+                password,
+            }),
+        });
+
+        const data = await response.json();
+
+        alert(data.message);
+
+        if (data.success) {
+            window.location.href = "login.html";
+        }
+
+    } catch (error) {
+        console.error(error);
+        alert("Server Error");
+    }
 }
 
 // ==========================
@@ -175,19 +176,16 @@ async function login() {
 
     try {
 
-        const response = await fetch(
-            "http://localhost:3000/api/login",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    email,
-                    password
-                })
-            }
-        );
+        const response = await fetch("/api/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email,
+                password
+            })
+        });
 
         const data = await response.json();
 
@@ -207,5 +205,4 @@ async function login() {
         alert("Server Error");
 
     }
-
 }

@@ -32,7 +32,7 @@ document
     try {
 
       const response = await fetch(
-        "http://localhost:3000/api/signup",
+        "/api/signup",
         {
           method: "POST",
           headers: {
