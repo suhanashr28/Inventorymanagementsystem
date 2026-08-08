@@ -7,13 +7,14 @@
     "dev": "nodemon server.js"
   },
   "dependencies": {
+    "@libsql/client": "^0.14.0",
     "bcryptjs": "^2.4.3",
     "better-sqlite3": "^13.0.1",
     "dotenv": "^16.4.5",
     "express": "^5.1.0",
-    "multer": "^2.0.1",
     "jsonwebtoken": "^9.0.3",
-    "@libsql/client": "^0.14.0"
+    "multer": "^2.0.1",
+    "nodemailer": "^9.0.5"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"

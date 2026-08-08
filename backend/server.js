@@ -5,6 +5,8 @@ const path = require("path");
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const multer = require("multer");
+const nodemailer = require("nodemailer");
+const crypto = require("crypto");
 const { get, all, run, init } = require("./db");
 
 // A serverless function may receive a request while the database setup is
@@ -42,6 +44,30 @@ function passwordError(password) {
     return "Password must include a special character, such as #";
   }
   return null;
+}
+
+function createTemporaryPassword() {
+  const upper = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+  const lower = "abcdefghijkmnopqrstuvwxyz";
+  const numbers = "23456789";
+  const special = "#?!@$%^&*-";
+  const pick = (characters) => characters[crypto.randomInt(characters.length)];
+
+  return `${pick(upper)}${pick(lower)}${pick(numbers)}${pick(special)}${crypto.randomBytes(6).toString("base64url")}`;
+}
+
+function getMailer() {
+  const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS } = process.env;
+  if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS) {
+    throw new Error("Email is not configured. Add SMTP_HOST, SMTP_USER, and SMTP_PASS in Vercel.");
+  }
+
+  return nodemailer.createTransport({
+    host: SMTP_HOST,
+    port: Number(SMTP_PORT) || 587,
+    secure: process.env.SMTP_SECURE === "true",
+    auth: { user: SMTP_USER, pass: SMTP_PASS }
+  });
 }
 
 // ======================
@@ -173,6 +199,45 @@ app.post("/api/signup", async (req, res, next) => {
       success: true,
       message: "Account created"
     });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// ======================
+// FORGOT PASSWORD
+// ======================
+
+app.post("/api/forgot-password", async (req, res, next) => {
+  try {
+    const email = String(req.body.email || "").trim().toLowerCase();
+    if (!email) {
+      return res.status(400).json({ success: false, message: "Email is required" });
+    }
+
+    const user = await get("SELECT * FROM users WHERE email=?", [email]);
+    const successMessage = "If an account exists for this email, a temporary password has been sent.";
+
+    // Do not reveal whether an email address is registered.
+    if (!user) {
+      return res.json({ success: true, message: successMessage });
+    }
+
+    const temporaryPassword = createTemporaryPassword();
+    const mailer = getMailer();
+    await mailer.sendMail({
+      from: process.env.SMTP_FROM || process.env.SMTP_USER,
+      to: user.email,
+      subject: "Your InventoryPro temporary password",
+      text: `Hello ${user.name},\n\nYour temporary InventoryPro password is: ${temporaryPassword}\n\nUse it to log in, then change your password from Settings.\n\nIf you did not request this, contact the administrator immediately.`
+    });
+
+    await run("UPDATE users SET password=? WHERE email=?", [
+      bcrypt.hashSync(temporaryPassword, 10),
+      user.email
+    ]);
+
+    res.json({ success: true, message: successMessage });
   } catch (err) {
     next(err);
   }
