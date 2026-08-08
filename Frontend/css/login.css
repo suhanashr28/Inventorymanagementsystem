@@ -14,8 +14,8 @@ body{
 }
 
 .container{
-    width:900px;
-    height:550px;
+    width:min(1040px, calc(100vw - 48px));
+    min-height:640px;
     background:#fff;
     border-radius:12px;
     overflow:hidden;
@@ -28,15 +28,18 @@ body{
     background:#082567;
     color:white;
     text-align:center;
-    padding:40px 20px;
+    padding:56px 32px;
 }
 
 .left h2{
     margin-top:20px;
+    font-size:28px;
 }
 
 .left p{
-    margin:10px 0 30px;
+    margin:14px 0 30px;
+    font-size:17px;
+    line-height:1.5;
 }
 
 .left img{
@@ -51,30 +54,32 @@ body{
 }
 
 .login-box{
-    width:350px;
+    width:min(430px, 100%);
 }
 
 .login-box h1{
     color:#0f172a;
     margin-bottom:10px;
+    font-size:32px;
 }
 
 .login-box p{
     color:#64748b;
-    margin-bottom:20px;
+    margin-bottom:28px;
+    font-size:17px;
 }
 
 label{
     display:block;
-    margin-top:15px;
-    margin-bottom:5px;
+    margin-top:20px;
+    margin-bottom:8px;
     font-weight:600;
 }
 
 input[type="email"],
 input[type="password"]{
     width:100%;
-    padding:12px;
+    padding:15px;
     border:1px solid #d1d5db;
     border-radius:6px;
 }
@@ -126,8 +131,8 @@ input[type="password"]{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin:15px 0;
-    font-size:14px;
+    margin:22px 0;
+    font-size:15px;
 }
 
 .options label,
@@ -151,18 +156,18 @@ input[type="password"]{
 
 button{
     width:100%;
-    padding:12px;
+    padding:15px;
     border:none;
     border-radius:6px;
     background:#2563eb;
     color:white;
-    font-size:16px;
+    font-size:17px;
     cursor:pointer;
 }
 
 .signup{
     text-align:center;
-    margin-top:20px;
+    margin-top:26px;
 }
 
 .signup a{

@@ -14,8 +14,8 @@ body{
 }
 
 .container{
-    width:950px;
-    height:600px;
+    width:min(1100px, calc(100vw - 48px));
+    min-height:720px;
     background:white;
     border-radius:12px;
     overflow:hidden;
@@ -28,15 +28,18 @@ body{
     background:#082567;
     color:white;
     text-align:center;
-    padding:40px 20px;
+    padding:56px 32px;
 }
 
 .left h2{
     margin-top:20px;
+    font-size:28px;
 }
 
 .left p{
-    margin:10px 0 30px;
+    margin:14px 0 30px;
+    font-size:17px;
+    line-height:1.5;
 }
 
 .left img{
@@ -51,29 +54,31 @@ body{
 }
 
 .signup-box{
-    width:380px;
+    width:min(460px, 100%);
 }
 
 .signup-box h1{
     color:#0f172a;
     margin-bottom:10px;
+    font-size:32px;
 }
 
 .signup-box p{
     color:#64748b;
-    margin-bottom:20px;
+    margin-bottom:28px;
+    font-size:17px;
 }
 
 label{
     display:block;
-    margin-top:15px;
-    margin-bottom:5px;
+    margin-top:18px;
+    margin-bottom:8px;
     font-weight:600;
 }
 
 input{
     width:100%;
-    padding:12px;
+    padding:14px 15px;
     border:1px solid #d1d5db;
     border-radius:6px;
 }
@@ -124,19 +129,19 @@ input{
 
 button{
     width:100%;
-    margin-top:25px;
-    padding:12px;
+    margin-top:30px;
+    padding:15px;
     border:none;
     border-radius:6px;
     background:#2563eb;
     color:white;
-    font-size:16px;
+    font-size:17px;
     cursor:pointer;
 }
 
 .login-link{
     text-align:center;
-    margin-top:20px;
+    margin-top:26px;
 }
 
 .login-link a{
@@ -146,17 +151,17 @@ button{
 }
 
 .password-help{
-    font-size:12px;
+    font-size:13px;
     line-height:1.4;
     color:#64748b;
-    margin:6px 0 0;
+    margin:8px 0 0;
 }
 
 .agreement{
     display:flex;
     align-items:center;
     gap:8px;
-    margin-top:15px;
+    margin-top:20px;
     font-weight:normal;
 }
 
