@@ -105,6 +105,29 @@ document.querySelectorAll(".password-toggle").forEach((button) => {
   });
 });
 
+const passwordInput = document.getElementById("password");
+const passwordRequirements = document.getElementById("passwordRequirements");
+
+passwordInput.addEventListener("input", () => {
+  const password = passwordInput.value;
+  passwordRequirements.classList.toggle("is-checking", password.length > 0);
+
+  const rules = {
+    length: password.length >= 8,
+    lowercase: /[a-z]/.test(password),
+    uppercase: /[A-Z]/.test(password),
+    number: /\d/.test(password),
+    special: /[#?!@$%^&*-]/.test(password)
+  };
+
+  passwordRequirements.querySelectorAll("li").forEach((requirement) => {
+    requirement.classList.toggle(
+      "is-valid",
+      password.length > 0 && rules[requirement.dataset.rule]
+    );
+  });
+});
+
 function getPasswordError(password) {
   if (password.length < 8) return "Password must be at least 8 characters long.";
   if (!/[a-z]/.test(password)) return "Password must include a lowercase letter.";
