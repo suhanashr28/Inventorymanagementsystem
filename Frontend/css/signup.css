@@ -15,7 +15,7 @@ body{
 
 .container{
     width:min(1100px, calc(100vw - 48px));
-    min-height:720px;
+    min-height:760px;
     background:white;
     border-radius:12px;
     overflow:hidden;
@@ -151,6 +151,9 @@ button{
 }
 
 .password-help{
+    display:grid;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    column-gap:14px;
     font-size:13px;
     line-height:1.4;
     color:#64748b;
@@ -160,6 +163,12 @@ button{
 
 .password-help li{
     margin:3px 0;
+}
+
+@media (max-width:680px){
+    .password-help{
+        grid-template-columns:1fr;
+    }
 }
 
 .password-help.is-checking li{
