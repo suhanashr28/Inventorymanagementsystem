@@ -7,6 +7,7 @@ const bcrypt = require("bcryptjs");
 const multer = require("multer");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
+const { put } = require("@vercel/blob");
 const { get, all, run, init } = require("./db");
 
 // A serverless function may receive a request while the database setup is
@@ -97,7 +98,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(express.static(path.join(__dirname, "../frontend")));
+app.use(express.static(path.join(__dirname, "../Frontend")));
 
 // image folder access
 app.use("/uploads", express.static(uploadsDir));
@@ -113,7 +114,7 @@ app.get("/", (req, res) => {
 // IMAGE UPLOAD
 // ======================
 
-const storage = multer.diskStorage({
+const diskStorage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, uploadsDir);
   },
@@ -122,7 +123,34 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ storage: storage });
+const storage = process.env.VERCEL ? multer.memoryStorage() : diskStorage;
+const upload = multer({
+  storage,
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    if (!file.mimetype.startsWith("image/")) {
+      return cb(new Error("Only image files can be uploaded"));
+    }
+    cb(null, true);
+  }
+});
+
+async function saveImage(file) {
+  if (!file) return null;
+
+  // Files written to Vercel's /tmp directory disappear between requests.
+  // Vercel Blob keeps them available permanently and returns a public URL.
+  if (process.env.VERCEL) {
+    const blob = await put(`inventory/${file.originalname}`, file.buffer, {
+      access: "public",
+      addRandomSuffix: true,
+      contentType: file.mimetype
+    });
+    return blob.url;
+  }
+
+  return file.filename;
+}
 
 // ======================
 // LOGIN
@@ -278,7 +306,7 @@ app.post("/api/products", upload.single("image"), async (req, res, next) => {
   try {
     const { name, supplier, price, quantity, category, description } = req.body;
 
-    const image = req.file ? req.file.filename : "default.jpg";
+    const image = await saveImage(req.file);
 
     const result = await run(
       `INSERT INTO products
@@ -309,7 +337,7 @@ app.put("/api/products/:id", upload.single("image"), async (req, res, next) => {
       [req.params.id]
     );
 
-    const image = req.file ? req.file.filename : oldProduct.image;
+    const image = req.file ? await saveImage(req.file) : oldProduct.image;
 
     await run(
       `UPDATE products
@@ -394,7 +422,7 @@ app.post("/api/suppliers", upload.single("image"), async (req, res, next) => {
   try {
     const { name, email, phone, address } = req.body;
 
-    const image = req.file ? req.file.filename : "default.jpg";
+    const image = await saveImage(req.file);
 
     const result = await run(
       `INSERT INTO suppliers (name, email, phone, address, image)
@@ -431,7 +459,7 @@ app.put("/api/suppliers/:id", upload.single("image"), async (req, res, next) => 
       });
     }
 
-    const image = req.file ? req.file.filename : existing.image;
+    const image = req.file ? await saveImage(req.file) : existing.image;
 
     await run(
       `UPDATE suppliers

@@ -120,8 +120,11 @@ supplier.address;
 document.getElementById("supplierProducts").innerText =
 supplier.products || "0";
 
-document.getElementById("supplierImage").src =
-"/uploads/" + supplier.image;
+document.getElementById("supplierImage").src = supplier.image
+? (supplier.image.startsWith("http")
+? supplier.image
+: "/uploads/" + supplier.image)
+: "/image/stock.jpg";
 
 })
 .catch(error => {

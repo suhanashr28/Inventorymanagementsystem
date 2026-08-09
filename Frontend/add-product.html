@@ -59,7 +59,7 @@
 
 
 
-<form id="productForm">
+<form id="productForm" class="product-form">
 
 
 <div class="left">
@@ -198,6 +198,8 @@ type="file"
 id="image"
 accept="image/*">
 
+<img id="imagePreview" class="image-preview" alt="Selected product preview" hidden>
+
 
 
 </div>
@@ -297,10 +299,11 @@ document.getElementById("supplier").value
 
 
 
-formData.append(
-"image",
-document.getElementById("image").files[0]
-);
+const imageFile = document.getElementById("image").files[0];
+
+if (imageFile) {
+formData.append("image", imageFile);
+}
 
 
 
@@ -332,7 +335,7 @@ console.log(data);
 
 
 
-if(data.success){
+if(response.ok && data.success){
 
 
 alert("Product Added Successfully!");
@@ -345,9 +348,23 @@ window.location.href="product.html";
 else{
 
 
-alert("Product Not Added");
+alert(data.message || "Product Not Added");
 
 }
+
+document.getElementById("image").addEventListener("change", function () {
+const preview = document.getElementById("imagePreview");
+const imageFile = this.files[0];
+
+if (!imageFile) {
+preview.hidden = true;
+preview.removeAttribute("src");
+return;
+}
+
+preview.src = URL.createObjectURL(imageFile);
+preview.hidden = false;
+});
 
 
 }

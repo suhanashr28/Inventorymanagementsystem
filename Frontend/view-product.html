@@ -304,8 +304,11 @@ document.getElementById("stock").innerText =
 // image
 
 
-const imagePath = 
-"/uploads/" + product.image;
+const imagePath = product.image
+? (product.image.startsWith("http")
+? product.image
+: "/uploads/" + product.image)
+: "/image/stock.jpg";
 
 
 document.getElementById("mainImage").src = imagePath;

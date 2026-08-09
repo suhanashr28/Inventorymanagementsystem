@@ -288,8 +288,11 @@ product.category;
 
 // show old image
 
-document.getElementById("productImage").src =
-"/uploads/" + product.image;
+document.getElementById("productImage").src = product.image
+? (product.image.startsWith("http")
+? product.image
+: "/uploads/" + product.image)
+: "/image/stock.jpg";
 
 
 

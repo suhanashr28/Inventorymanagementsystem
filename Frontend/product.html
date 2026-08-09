@@ -71,6 +71,28 @@ placeholder="Search Product"
 
 <option>Bakery</option>
 
+<option>Beverages</option>
+
+<option>Snacks</option>
+
+<option>Frozen Food</option>
+
+<option>Meat</option>
+
+<option>Fish</option>
+
+<option>Rice &amp; Grains</option>
+
+<option>Spices</option>
+
+<option>Canned Food</option>
+
+<option>Personal Care</option>
+
+<option>Cleaning Supplies</option>
+
+<option>Others</option>
+
 </select>
 
 
@@ -185,6 +207,11 @@ alert("Cannot connect with server");
 
 // Display products
 
+function productImageUrl(image) {
+return image
+? (image.startsWith("http") ? image : `/uploads/${image}`)
+: "/image/stock.jpg";
+}
 
 function displayProducts(products){
 
@@ -214,10 +241,11 @@ let row = `
 <td>
 
 <img 
-src="/uploads/${product.image}" 
+src="${productImageUrl(product.image)}"
 width="40"
 height="40"
-alt="Product Image">
+alt="Product Image"
+onerror="this.onerror=null;this.src='/image/stock.jpg'">
 
 </td>
 
