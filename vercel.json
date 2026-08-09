@@ -4,6 +4,11 @@
     { "src": "backend/server.js", "use": "@vercel/node" },
     { "src": "Frontend/**", "use": "@vercel/static" }
   ],
+  "functions": {
+    "backend/server.js": {
+      "includeFiles": "backend/uploads/**"
+    }
+  },
   "routes": [
     { "src": "/api/(.*)", "dest": "backend/server.js" },
     { "src": "/uploads/(.*)", "dest": "backend/server.js" },
