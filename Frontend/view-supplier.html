@@ -123,7 +123,9 @@ supplier.products || "0";
 document.getElementById("supplierImage").src = supplier.image
 ? (supplier.image.startsWith("http")
 ? supplier.image
-: "/uploads/" + supplier.image)
+: (supplier.image.startsWith("data:")
+? supplier.image
+: "/uploads/" + supplier.image))
 : "/image/stock.jpg";
 
 })

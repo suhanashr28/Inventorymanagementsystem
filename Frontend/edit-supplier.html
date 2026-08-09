@@ -103,7 +103,9 @@
     supplier.image
         ? (supplier.image.startsWith("http")
             ? supplier.image
-            : `/uploads/${supplier.image}`)
+            : (supplier.image.startsWith("data:")
+                ? supplier.image
+                : `/uploads/${supplier.image}`))
         : "/uploads/default.jpg";
         } catch (error) {
           console.log(error);

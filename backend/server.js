@@ -122,10 +122,12 @@ const diskStorage = multer.diskStorage({
   }
 });
 
-const storage = diskStorage;
+// Vercel's filesystem is temporary. Keep uploaded images in the database
+// there; local development continues to write files into backend/uploads.
+const storage = process.env.VERCEL ? multer.memoryStorage() : diskStorage;
 const upload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 },
+  limits: { fileSize: 3 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     if (!file.mimetype.startsWith("image/")) {
       return cb(new Error("Only image files can be uploaded"));
@@ -136,6 +138,10 @@ const upload = multer({
 
 async function saveImage(file) {
   if (!file) return null;
+
+  if (process.env.VERCEL) {
+    return `data:${file.mimetype};base64,${file.buffer.toString("base64")}`;
+  }
 
   return file.filename;
 }

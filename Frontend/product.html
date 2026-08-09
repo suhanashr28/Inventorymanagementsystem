@@ -209,7 +209,9 @@ alert("Cannot connect with server");
 
 function productImageUrl(image) {
 return image
-? (image.startsWith("http") ? image : `/uploads/${image}`)
+? ((image.startsWith("http") || image.startsWith("data:"))
+? image
+: `/uploads/${image}`)
 : "/image/stock.jpg";
 }
 
