@@ -7,7 +7,6 @@ const bcrypt = require("bcryptjs");
 const multer = require("multer");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
-const { put } = require("@vercel/blob");
 const { get, all, run, init } = require("./db");
 
 // A serverless function may receive a request while the database setup is
@@ -123,7 +122,7 @@ const diskStorage = multer.diskStorage({
   }
 });
 
-const storage = process.env.VERCEL ? multer.memoryStorage() : diskStorage;
+const storage = diskStorage;
 const upload = multer({
   storage,
   limits: { fileSize: 5 * 1024 * 1024 },
@@ -137,17 +136,6 @@ const upload = multer({
 
 async function saveImage(file) {
   if (!file) return null;
-
-  // Files written to Vercel's /tmp directory disappear between requests.
-  // Vercel Blob keeps them available permanently and returns a public URL.
-  if (process.env.VERCEL) {
-    const blob = await put(`inventory/${file.originalname}`, file.buffer, {
-      access: "public",
-      addRandomSuffix: true,
-      contentType: file.mimetype
-    });
-    return blob.url;
-  }
 
   return file.filename;
 }
