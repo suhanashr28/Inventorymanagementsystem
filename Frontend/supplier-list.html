@@ -36,7 +36,12 @@
         <div class="top-bar">
           <h1>Suppliers</h1>
 
-          <input type="text" placeholder="Search supplier..." />
+          <input
+            type="text"
+            id="supplierSearch"
+            placeholder="Search supplier..."
+            aria-label="Search suppliers"
+          />
 
           <button onclick="addSupplierPage()">Add Supplier</button>
         </div>
@@ -58,20 +63,9 @@
     </div>
     <script>
 
-async function loadSuppliers(){
+let allSuppliers = [];
 
-try{
-
-const response = await fetch(
-"/api/suppliers",
-{ cache: "no-store" }
-);
-
-if(!response.ok){
-    throw new Error("Failed to load suppliers");
-}
-
-const suppliers = await response.json();
+function displaySuppliers(suppliers){
 
 let html = "";
 
@@ -99,6 +93,24 @@ onclick="deleteSupplier(${supplier.id})"></i>
 });
 
 document.getElementById("supplierTable").innerHTML = html;
+
+}
+
+async function loadSuppliers(){
+
+try{
+
+const response = await fetch(
+"/api/suppliers",
+{ cache: "no-store" }
+);
+
+if(!response.ok){
+    throw new Error("Failed to load suppliers");
+}
+
+allSuppliers = await response.json();
+displaySuppliers(allSuppliers);
 
 }
 
@@ -143,6 +155,19 @@ alert(data.message);
 loadSuppliers();
 
 }
+
+document.getElementById("supplierSearch").addEventListener("input", function(){
+
+const searchTerm = this.value.trim().toLowerCase();
+
+const filteredSuppliers = allSuppliers.filter(supplier =>
+  [supplier.name, supplier.email, supplier.phone]
+    .some(value => String(value || "").toLowerCase().includes(searchTerm))
+);
+
+displaySuppliers(filteredSuppliers);
+
+});
 
 loadSuppliers();
 
