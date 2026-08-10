@@ -167,6 +167,16 @@ id="quantity">
 
 
 
+<label>Supplier</label>
+
+<input
+type="text"
+id="supplier"
+placeholder="Enter supplier"
+required>
+
+
+
 
 <label>
 Current Image
@@ -286,6 +296,11 @@ product.category;
 
 
 
+document.getElementById("supplier").value =
+product.supplier || "";
+
+
+
 // show old image
 
 document.getElementById("productImage").src = product.image
@@ -352,7 +367,7 @@ async function updateProduct(){
 const formData = new FormData();
 
 formData.append("name", document.getElementById("productName").value);
-formData.append("supplier", "");
+formData.append("supplier", document.getElementById("supplier").value);
 formData.append("price", document.getElementById("price").value);
 formData.append("quantity", document.getElementById("quantity").value);
 formData.append("category", document.getElementById("category").value);
