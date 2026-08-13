@@ -59,7 +59,7 @@ function createTemporaryPassword() {
 function getMailer() {
   const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS } = process.env;
   if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS) {
-    throw new Error("Email is not configured. Add SMTP_HOST, SMTP_USER, and SMTP_PASS in Vercel.");
+    throw new Error("Email delivery is not configured. Add SMTP_HOST, SMTP_USER, and SMTP_PASS in Vercel.");
   }
 
   return nodemailer.createTransport({
@@ -629,9 +629,16 @@ app.put("/api/change-password/:email", async (req, res, next) => {
 
 app.use((err, req, res, next) => {
   console.error("Server error:", err);
+  const isEmailAuthError = err && (
+    err.responseCode === 535 ||
+    /bad credentials|username and password not accepted|invalid login/i.test(err.message || "")
+  );
+
   res.status(500).json({
     success: false,
-    message: err.message || "Something went wrong"
+    message: isEmailAuthError
+      ? "Email delivery is unavailable. Please contact the administrator."
+      : err.message || "Something went wrong"
   });
 });
 
